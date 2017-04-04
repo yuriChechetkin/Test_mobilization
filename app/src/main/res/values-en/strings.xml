@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Mobilization</string>
+    <string name="history">History</string>
+    <string name="favorite">Favorites</string>
+    <string name="findHistory">Find in history</string>
+    <string name="findFavorite">Find in favorites</string>
+</resources>
