@@ -19,6 +19,10 @@ public interface HistoryInteractor {
 
     void deleteHistory(Translate t);
 
-    void addFavorite(Translate t);
+    void setFavorite(Translate t);
+
+    void unFavorite(Translate t);
+
+    boolean isFavorite(Translate t);
 
 }

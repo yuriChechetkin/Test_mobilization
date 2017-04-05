@@ -38,8 +38,12 @@ public class HistoryPresenterImpl implements HistoryPresenter {
     }
 
     @Override
-    public void addFavorite(Translate t) {
-
+    public void addFavorite(Translate translate) {
+        if (historyInteractor.isFavorite(translate)) {
+            historyInteractor.unFavorite(translate);
+        } else {
+            historyInteractor.setFavorite(translate);
+        }
     }
 
     @Override

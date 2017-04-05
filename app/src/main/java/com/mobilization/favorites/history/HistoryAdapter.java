@@ -40,6 +40,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
 
         public Translate translate;
+        public int position=0;
 
         public ViewHolder(View root) {
             super(root);
@@ -69,10 +70,25 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         holder.itemView.setOnClickListener(holder);
         holder.translate = translates.get(position);
+        holder.position = position;
         if (holder.translate.isFavorite())
             holder.btnFavorite.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
         else
             holder.btnFavorite.setColorFilter(ContextCompat.getColor(context, R.color.colorDarkGray));
+
+        holder.btnFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(translates.get(position).isFavorite()){
+                    translates.get(position).setFavorite(false);
+                }else{
+                    translates.get(position).setFavorite(true);
+                }
+                HistoryAdapter.this.view.addFavorite(holder.translate);
+                HistoryAdapter.this.notifyItemChanged(position);
+            }
+        });
+
         holder.tvTranslatedText.setText(holder.translate.getTranslatedText());
         holder.tvOriginalText.setText(holder.translate.getOriginalText());
     }

@@ -63,7 +63,8 @@ class MainPresenterImpl implements MainPresenter {
     private void onTranslationFetchSuccess(Translate tr) {
         if (isViewAttached()) {
             view.showTranslation(tr);
-            translationInteractor.addHistory(tr);
+            if(!tr.getTranslatedText().isEmpty())
+                translationInteractor.addHistory(tr);
         }
     }
 

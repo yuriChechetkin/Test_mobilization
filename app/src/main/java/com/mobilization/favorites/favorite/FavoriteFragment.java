@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.jakewharton.rxbinding.widget.RxSearchView;
 import com.mobilization.BaseApplication;
 import com.mobilization.R;
+import com.mobilization.favorites.history.HistoryFragment;
 import com.mobilization.models.Translate;
 
 import java.util.ArrayList;
@@ -47,8 +48,11 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
 
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+            displayData();
+        }
     }
 
     @Override

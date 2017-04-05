@@ -41,8 +41,19 @@ public class HistoryInteractorImpl implements HistoryInteractor {
 
     }
 
-    @Override
-    public void addFavorite(Translate t) {
 
+    @Override
+    public void setFavorite(Translate t) {
+        storeInteractor.setFavorite(t);
+    }
+
+    @Override
+    public void unFavorite(Translate t) {
+        storeInteractor.unFavorite(t);
+    }
+
+    @Override
+    public boolean isFavorite(Translate t) {
+        return storeInteractor.isFavorite(t);
     }
 }

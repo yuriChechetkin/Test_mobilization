@@ -108,7 +108,7 @@ public class HistoryFragment extends Fragment implements HistoryView {
 
     @Override
     public void addFavorite(Translate t) {
-
+        historyPresenter.addFavorite(t);
     }
 
     @Override
