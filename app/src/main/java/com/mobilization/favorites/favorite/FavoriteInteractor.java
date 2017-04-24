@@ -16,6 +16,8 @@ public interface FavoriteInteractor {
 
     void deleteFavorite(Translate t);
 
+    void clearHistory();
+
     void addFavorite(Translate t);
 
 }

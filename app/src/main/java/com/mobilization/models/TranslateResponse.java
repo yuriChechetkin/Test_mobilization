@@ -15,7 +15,7 @@ public class TranslateResponse implements Serializable {
 
     @SerializedName("code")
     @Expose
-    private String code;
+    private String code="";
 
     @SerializedName("lang")
     @Expose

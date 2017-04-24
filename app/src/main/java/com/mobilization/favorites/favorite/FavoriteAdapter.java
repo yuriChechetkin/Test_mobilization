@@ -72,6 +72,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         holder.btnFavorite.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
         holder.tvTranslatedText.setText(holder.translate.getTranslatedText());
         holder.tvOriginalText.setText(holder.translate.getOriginalText());
+        holder.tvLangs.setText(holder.translate.getDirs().toUpperCase());
     }
 
     @Override

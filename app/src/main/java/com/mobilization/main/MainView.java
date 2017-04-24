@@ -1,5 +1,6 @@
 package com.mobilization.main;
 
+import com.mobilization.models.Language;
 import com.mobilization.models.Translate;
 
 import java.util.List;
@@ -19,4 +20,16 @@ public interface MainView {
     void loadingStarted();
 
     void loadingFailed(String errorMessage);
+
+    void selectOriginalLang();
+
+    void selectTranslateLang(String currentLangUi);
+
+    void setOriginalLang(String langName);
+
+    void setTranslateLang(String langName);
+
+    void setSwappedLangs(String originalLangName, String translateLangName);
+
+    void setLastTranslate(Translate t);
 }

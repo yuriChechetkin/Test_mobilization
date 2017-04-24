@@ -1,9 +1,11 @@
 package com.mobilization.favorites.history;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.SearchView;
@@ -36,6 +38,9 @@ public class HistoryFragment extends Fragment implements HistoryView {
 
     @Inject
     Context c;
+
+    @Inject
+    Resources res;
 
     @BindView(R.id.rv)
     RecyclerView rv;
@@ -78,6 +83,10 @@ public class HistoryFragment extends Fragment implements HistoryView {
         rv.setLayoutManager(layoutManager);
         adapter = new HistoryAdapter(translates, this);
         rv.setAdapter(adapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
+                layoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(res.getDrawable(R.drawable.item_divider));
+        rv.addItemDecoration(dividerItemDecoration);
     }
 
     private void initLayoutReferences() {
@@ -95,8 +104,8 @@ public class HistoryFragment extends Fragment implements HistoryView {
 
     @Override
     public void showHistory(List<Translate> historyTranslates) {
-        this.translates.clear();
-        this.translates.addAll(historyTranslates);
+        translates.clear();
+        translates.addAll(historyTranslates);
         rv.setVisibility(View.VISIBLE);
         adapter.notifyDataSetChanged();
     }
@@ -119,6 +128,13 @@ public class HistoryFragment extends Fragment implements HistoryView {
     @Override
     public void loadingFailed(String errorMessage) {
 
+    }
+
+    @Override
+    public void clearHistory() {
+        historyPresenter.clearHistory();
+        translates.clear();
+        adapter.notifyDataSetChanged();
     }
 
     public void displayData() {

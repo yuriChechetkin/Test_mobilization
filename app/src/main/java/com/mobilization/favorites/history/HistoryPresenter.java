@@ -14,6 +14,8 @@ public interface HistoryPresenter
 
     void displayHistory();
 
+    void clearHistory();
+
     void displayHistory(String substr);
 
     void setView(HistoryView view);

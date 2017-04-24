@@ -1,6 +1,7 @@
 package com.mobilization.models;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by mac on 02.04.17.
@@ -12,28 +13,12 @@ public class Translate implements Serializable {
     private String translatedText;
     private Language originalLang;
     private Language tranlsateLang;
+    private String dirs;
     private boolean isFavorite = false;
-    private boolean isHistory = false; /*??????*/
+    private long unixTime=0; //для идентификации;
 
     public Translate() {
-
-    }
-
-    public Translate(TranslateResponse tr) {
-        Language l1 = new Language(tr.getLang(), tr.getLang().split("-")[0]);
-        Language l2 = new Language(tr.getLang(), tr.getLang().split("-")[1]);
-        this.setOriginalLang(l1);
-        this.setTranlsateLang(l2);
-        this.setTranslatedText(tr.getText().get(0));
-    }
-
-    public Translate(String originalText, String translatedText, Language originalLang, Language tranlsateLang, boolean isFavorite, boolean isHistory) {
-        this.originalText = originalText;
-        this.translatedText = translatedText;
-        this.originalLang = originalLang;
-        this.tranlsateLang = tranlsateLang;
-        this.isFavorite = isFavorite;
-        this.isHistory = isHistory;
+        this.unixTime = new Date().getTime();
     }
 
     public String getOriginalText() {
@@ -76,12 +61,12 @@ public class Translate implements Serializable {
         isFavorite = favorite;
     }
 
-    public boolean isHistory() {
-        return isHistory;
+    public String getDirs() {
+        return dirs;
     }
 
-    public void setHistory(boolean history) {
-        isHistory = history;
+    public void setDirs(String dirs) {
+        this.dirs = dirs;
     }
 
     @Override
@@ -91,7 +76,7 @@ public class Translate implements Serializable {
 
         Translate translate = (Translate) o;
 
-        if (originalText.equals(translate.originalText) && translatedText.equals(translate.translatedText))
+        if (unixTime==translate.unixTime)
             return true;
         return false;
     }

@@ -49,6 +49,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         @Override
         public void onClick(View view) {
+            if(translates.get(position).isFavorite()){
+                translates.get(position).setFavorite(false);
+            }else{
+                translates.get(position).setFavorite(true);
+            }
+            HistoryAdapter.this.view.addFavorite(translate);
+            HistoryAdapter.this.notifyItemChanged(position);
             HistoryAdapter.this.view.onHistoryClicked(translate);
         }
     }
@@ -91,6 +98,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         holder.tvTranslatedText.setText(holder.translate.getTranslatedText());
         holder.tvOriginalText.setText(holder.translate.getOriginalText());
+        holder.tvLangs.setText(holder.translate.getDirs().toUpperCase());
     }
 
     @Override

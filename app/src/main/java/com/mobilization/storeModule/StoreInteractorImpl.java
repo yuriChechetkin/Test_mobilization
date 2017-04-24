@@ -3,7 +3,9 @@ package com.mobilization.storeModule;
 import com.mobilization.models.Language;
 import com.mobilization.models.Translate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mac on 03.04.17.
@@ -19,14 +21,30 @@ public class StoreInteractorImpl implements StoreInteractor {
 
 
     @Override
-    public void setLastLangs(Language l1, Language l2) {
-        storeImpl.setLastLangs(l1, l2);
+    public void setCurrentOriginalLang(Language l) {
+        storeImpl.setCurrentOriginalLang(l);
     }
 
     @Override
-    public List<Language> getLastLangs() {
-        return storeImpl.getLastLangs();
+    public Language getCurrentOriginalLang() {
+        return storeImpl.getCurrentOriginalLang();
     }
+
+    @Override
+    public ArrayList<Language> getLangs() {
+        return storeImpl.getLangs();
+    }
+
+    @Override
+    public void setCurrentTranslateLang(Language l) {
+        storeImpl.setCurrentTranslateLang(l);
+    }
+
+    @Override
+    public Language getCurrentTranslateLang() {
+        return storeImpl.getCurrentTranslateLang();
+    }
+
 
     @Override
     public void setLastTranslate(Translate t) {
@@ -39,23 +57,23 @@ public class StoreInteractorImpl implements StoreInteractor {
     }
 
     @Override
-    public void setLastOriginalLangs(Language l1, Language l2, Language l3) {
-        storeImpl.setLastOriginalLangs(l1, l2, l3);
+    public Language getLangByUi(String ui) {
+        return storeImpl.getLangByUi(ui);
     }
 
     @Override
-    public List<Language> getLastOriginalLangs() {
-        return storeImpl.getLastOriginalLangs();
+    public void setDirs(ArrayList<String> dirs) {
+        storeImpl.setDirs(dirs);
     }
 
     @Override
-    public void setLastTranslateLangs(Language l1, Language l2, Language l3) {
-        storeImpl.setLastTranslateLangs(l1, l2, l3);
+    public void setLangs(Map<String, String> langs) {
+        storeImpl.setLangs(langs);
     }
 
     @Override
-    public List<Language> getLastTranslateLangs() {
-        return storeImpl.getLastTranslateLangs();
+    public ArrayList<Language> getDirsByUi(String ui) {
+        return storeImpl.getDirsByUi(ui);
     }
 
     @Override
@@ -109,10 +127,6 @@ public class StoreInteractorImpl implements StoreInteractor {
         storeImpl.clearHistory();
     }
 
-    @Override
-    public void clearFavorite() {
-        storeImpl.clearFavorite();
-    }
 
     @Override
     public List<Translate> searchHistory(String substr) {

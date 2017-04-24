@@ -11,6 +11,8 @@ public interface FavoritePresenter {
 
     void deleteFavorite(Translate t);
 
+    void clearHistory();
+
     void addFavorite(Translate t);
 
     void displayFavorite();

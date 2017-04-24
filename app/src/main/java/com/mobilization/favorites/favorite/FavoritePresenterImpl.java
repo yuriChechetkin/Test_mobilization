@@ -44,6 +44,11 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     }
 
     @Override
+    public void clearHistory() {
+        favoriteInteractor.clearHistory();
+    }
+
+    @Override
     public void addFavorite(Translate t) {
 
     }

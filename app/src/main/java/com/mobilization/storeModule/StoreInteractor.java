@@ -3,7 +3,9 @@ package com.mobilization.storeModule;
 import com.mobilization.models.Language;
 import com.mobilization.models.Translate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mac on 03.04.17.
@@ -11,15 +13,21 @@ import java.util.List;
 
 public interface StoreInteractor
 {
-    void setLastLangs(Language l1, Language l2);
-    List<Language> getLastLangs();
+    //current languages
+    void setCurrentOriginalLang(Language l);
+    Language getCurrentOriginalLang();
+    void setCurrentTranslateLang(Language l);
+    Language getCurrentTranslateLang();
+
     void setLastTranslate(Translate t);
     Translate getLastTranslate();
 
-    void setLastOriginalLangs(Language l1, Language l2, Language l3);
-    List<Language> getLastOriginalLangs();
-    void setLastTranslateLangs(Language l1, Language l2, Language l3);
-    List<Language> getLastTranslateLangs();
+    //dirs & langs
+    void setDirs(ArrayList<String> dirs);
+    void setLangs(Map<String, String> langs);
+    ArrayList<Language> getDirsByUi(String ui);
+    ArrayList<Language> getLangs();
+    Language getLangByUi(String ui);
 
     void addHistoryTranslate(Translate t);
     void deleteHistoryTranslate(Translate t);
@@ -33,7 +41,6 @@ public interface StoreInteractor
     List<Translate> getFavoriteTranslates();
 
     void clearHistory();
-    void clearFavorite();
 
     List<Translate> searchHistory(String substr);
     List<Translate> searchFavorite(String substr);

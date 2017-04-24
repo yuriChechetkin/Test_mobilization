@@ -25,6 +25,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_toLeftOf="@+id/btnSwapLang"
                 android:text="Английский"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:textColor="@android:color/black"
                 android:textSize="16dp" />
 
@@ -45,6 +46,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_toRightOf="@+id/btnSwapLang"
                 android:text="Русский"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:textColor="@android:color/black"
                 android:textSize="16dp" />
         </RelativeLayout>
@@ -170,11 +172,13 @@
 
     <TextView
         android:id="@+id/tvRes"
+        android:transitionName="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rlInputContainer"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="18dp"
+        android:textIsSelectable="true"
         android:layout_toLeftOf="@+id/btnSoundTranslate"
         android:textSize="18dp" />
 

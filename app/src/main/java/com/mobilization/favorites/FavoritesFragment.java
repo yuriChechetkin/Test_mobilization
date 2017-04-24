@@ -1,5 +1,6 @@
 package com.mobilization.favorites;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,10 +8,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.mobilization.R;
 import com.mobilization.favorites.favorite.FavoriteFragment;
 import com.mobilization.favorites.history.HistoryFragment;
@@ -61,6 +68,28 @@ public class FavoritesFragment extends Fragment {
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_favorite, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //noinspection SimplifiableIfStatement
+        if (item.getItemId() == R.id.action_clear) {
+            /*if(adapter.getItem(viewPager.getCurrentItem()) instanceof MainFeedFragment)
+                ((MainFeedFragment)adapter.getItem(viewPager.getCurrentItem())).Toast("ga1");
+            else
+                ((FavoriteFeedFragment)adapter.getItem(viewPager.getCurrentItem())).Toast("ga2");*/
+            ((FavoriteFragment)adapter.getItem(1)).clearHistory();
+            ((HistoryFragment)adapter.getItem(0)).clearHistory();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupViewPager (ViewPager pager) {

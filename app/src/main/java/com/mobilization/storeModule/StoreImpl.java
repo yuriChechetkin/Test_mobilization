@@ -7,7 +7,10 @@ import com.mobilization.models.Translate;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,6 +33,22 @@ public class StoreImpl {
         return Hawk.isBuilt();
     }
 
+
+    public void setCurrentOriginalLang(Language l){
+        Hawk.put("currentOriginalLang", l);
+    }
+
+    public Language getCurrentOriginalLang(){
+       return Hawk.get("currentOriginalLang", getLangByUi("en"));
+    }
+
+    public void setCurrentTranslateLang(Language l){
+        Hawk.put("currentTranslateLang", l);
+    }
+
+    public Language getCurrentTranslateLang(){
+        return Hawk.get("currentTranslateLang", getLangByUi("ru"));
+    }
 
     public void setFavorite(Translate translate) {
         List<Translate> historyTranslates = getHistoryTranslates();
@@ -104,41 +123,59 @@ public class StoreImpl {
 
 
     public Translate getLastTranslate() {
-        return Hawk.get("lastTranslate", new Translate());
+        return Hawk.get("lastTranslate");
     }
 
 
-    public void setLastOriginalLangs(Language l1, Language l2, Language l3) {
-        Hawk.put("lastOriginalLang1", l1);
-        Hawk.put("lastOriginalLang2", l2);
-        Hawk.put("lastOriginalLang3", l3);
+
+    public void setDirs(ArrayList<String> dirs){
+        ArrayList<Language> dirsByLang = new ArrayList<>();
+        String fromUi="";
+        String toUi="";
+        String temp=dirs.get(0); //init first value
+
+        for(String d: dirs){
+            fromUi=d.split("-")[0];
+            toUi=d.split("-")[1];
+
+            if(fromUi.equals(temp)) {
+                dirsByLang.add(getLangByUi(toUi));
+            }else{
+                temp=fromUi;
+                dirsByLang = new ArrayList<>();
+                dirsByLang.add(getLangByUi(toUi));
+            }
+            Hawk.put(temp, dirsByLang); //key - from language ui, value - all to Languages
+        }
     }
 
-
-    public List<Language> getLastOriginalLangs() {
-        List<Language> l = new ArrayList<>();
-        l.add(Hawk.get("lastOriginalLang1"), new Language());
-        l.add(Hawk.get("lastOriginalLang2"), new Language());
-        l.add(Hawk.get("lastOriginalLang3"), new Language());
-        return l;
+    public ArrayList<Language> getDirsByUi(String fromUi){
+        ArrayList<Language> dirs = Hawk.get(fromUi);
+        if(dirs!=null && dirs.size()>0)
+            return dirs;
+        else
+            return new ArrayList<>();
     }
 
-
-    public void setLastTranslateLangs(Language l1, Language l2, Language l3) {
-        Hawk.put("lastTranslateLang1", l1);
-        Hawk.put("lastTranslateLang2", l2);
-        Hawk.put("lastTranslateLang3", l3);
+    public Language getLangByUi(String ui){
+        String name = ((Map<String, String>)Hawk.get("langs")).get(ui);
+        return new Language(name, ui);
     }
 
+    public ArrayList<Language> getLangs(){
+        ArrayList<Language> listLangs = new ArrayList<>();
+        Map<String, String> mapLangs = Hawk.get("langs", new HashMap<>());
+        for (Map.Entry<String, String> entry : mapLangs.entrySet())
+        {
+            listLangs.add(new Language(entry.getValue(), entry.getKey()));
+        }
 
-    public List<Language> getLastTranslateLangs() {
-        List<Language> l = new ArrayList<>();
-        l.add(Hawk.get("lastTranslateLang1"), new Language());
-        l.add(Hawk.get("lastTranslateLang2"), new Language());
-        l.add(Hawk.get("lastTranslateLang3"), new Language());
-        return l;
+        return listLangs;
     }
 
+    public void setLangs(Map<String, String> langs){
+        Hawk.put("langs", langs);
+    }
 
     public void addHistoryTranslate(Translate t) {
         List<Translate> translates = getHistoryTranslates();

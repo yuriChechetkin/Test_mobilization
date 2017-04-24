@@ -14,6 +14,8 @@ public interface HistoryView {
 
     void deleteHistory(Translate t);
 
+    void clearHistory();
+
     void addFavorite(Translate t);
 
     void loadingStarted();

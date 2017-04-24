@@ -5,10 +5,12 @@
     <color name="colorAccent">#ffdd60</color>
     <color name="colorDarkGray">#858e98</color>
     <color name="colorLightGray">#cbcbcb</color>
+    <color name="colorPaleGray">#F5F5F5</color>
     <color name="colorTextInput">#333333</color>
     <color name="colorTextBlack">#000000</color>
     <color name="colorTextHeader">#af8da0</color>
     <color name="colorTextTranslate">#4b7893</color>
     <color name="colorTextOriginal">#8d634d</color>
+    <color name="colorSplashBackground">#efd101</color>
 
 </resources>

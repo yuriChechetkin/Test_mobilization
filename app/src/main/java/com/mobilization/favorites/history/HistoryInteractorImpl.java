@@ -41,6 +41,10 @@ public class HistoryInteractorImpl implements HistoryInteractor {
 
     }
 
+    @Override
+    public void clearHistory() {
+        storeInteractor.clearHistory();
+    }
 
     @Override
     public void setFavorite(Translate t) {

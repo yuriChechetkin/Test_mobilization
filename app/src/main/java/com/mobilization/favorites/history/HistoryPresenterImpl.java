@@ -47,6 +47,11 @@ public class HistoryPresenterImpl implements HistoryPresenter {
     }
 
     @Override
+    public void clearHistory() {
+        historyInteractor.clearHistory();
+    }
+
+    @Override
     public void deleteHistory(Translate t) {
 
     }

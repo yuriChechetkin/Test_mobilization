@@ -1,11 +1,14 @@
 package com.mobilization.main;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.view.LayoutInflater;
@@ -19,7 +22,10 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mobilization.BaseApplication;
+import com.mobilization.DetailTextActivity;
 import com.mobilization.R;
+import com.mobilization.languages.SelectLanguageActivity;
+import com.mobilization.models.Language;
 import com.mobilization.models.Translate;
 
 import java.util.List;
@@ -78,6 +84,8 @@ public class MainFragment extends Fragment implements MainView, View.OnClickList
 
 
     private Translate currentTranslate;
+    private final static int ORIGINAL_LANG_REQUEST_CODE = 100;
+    private final static int TRANSLATE_LANG_REQUEST_CODE = 101;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,13 +107,21 @@ public class MainFragment extends Fragment implements MainView, View.OnClickList
         btnFavorite.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         btnFullscreen.setOnClickListener(this);
+        tvOriginalLang.setOnClickListener(this);
+        tvTranslateLang.setOnClickListener(this);
+        btnSwapLang.setOnClickListener(this);
+
+        mainPresenter.setView(this);
 
         RxTextView.textChanges(etText)
-                //.filter(charSequence -> charSequence.length()>3)
+                .skip(1)
+                //.filter(charSequence -> charSequence.length()>0)
+                //.filter(charSequence -> !charSequence.toString().trim().equals(currentTranslate.getOriginalText().trim()))
                 .debounce(750, TimeUnit.MILLISECONDS)
                 .subscribe(this::onCompleteEnter);
 
         RxTextView.textChanges(tvRes)
+                //.skip(1)
                 .subscribe(this::onCompleteTranslate);
 
         return rootView;
@@ -127,16 +143,88 @@ public class MainFragment extends Fragment implements MainView, View.OnClickList
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainPresenter.setView(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnFavorite) {
-            mainPresenter.addFavorite(currentTranslate);
-        } else if (view.getId() == R.id.btnClear) {
-            etText.setText("");
+
+        switch (view.getId()){
+            case R.id.btnFavorite:
+                mainPresenter.addFavorite(currentTranslate);
+                break;
+            case R.id.btnClear:
+                etText.setText("");
+                break;
+            case R.id.tvOriginalLang:
+                mainPresenter.selectOriginalLang();
+                break;
+            case R.id.tvTranslateLang:
+                mainPresenter.selectTranslateLang();
+                break;
+            case R.id.btnSwapLang:
+                mainPresenter.swapLang();
+                break;
+            case R.id.btnShare:
+                share();
+                break;
+            case R.id.btnFullScreen:
+                fullScreen();
+            default:
+                break;
         }
+    }
+
+    @Override
+    public void setLastTranslate(Translate t) {
+        currentTranslate = t;
+        tvOriginalLang.setText(t.getOriginalLang().getName());
+        tvTranslateLang.setText(t.getTranlsateLang().getName());
+        etText.setText(t.getOriginalText());
+        tvRes.setText(t.getTranslatedText());
+        if(t.isFavorite())
+            showFavorite();
+    }
+
+    @Override
+    public void selectOriginalLang() {
+        startActivityForResult(new Intent(getActivity(), SelectLanguageActivity.class), ORIGINAL_LANG_REQUEST_CODE);
+    }
+
+    @Override
+    public void selectTranslateLang(String langUi) {
+        startActivityForResult(new Intent(getActivity(), SelectLanguageActivity.class).putExtra("lang", langUi), TRANSLATE_LANG_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode== Activity.RESULT_OK) {
+            if (requestCode == ORIGINAL_LANG_REQUEST_CODE) {
+                Language newLang = (Language) data.getSerializableExtra("newLang");
+                mainPresenter.setOriginalLang(newLang);
+            } else if (requestCode == TRANSLATE_LANG_REQUEST_CODE) {
+                Language newLang = (Language) data.getSerializableExtra("newLang");
+                mainPresenter.setTranslateLang(newLang);
+            }
+        }
+    }
+
+    @Override
+    public void setOriginalLang(String langName) {
+        tvOriginalLang.setText(langName);
+        mainPresenter.displayTranslation(etText.getText().toString());
+    }
+
+    @Override
+    public void setTranslateLang(String langName) {
+        tvTranslateLang.setText(langName);
+        mainPresenter.displayTranslation(etText.getText().toString());
+    }
+
+    @Override
+    public void setSwappedLangs(String originalLangName, String translateLangName) {
+        tvOriginalLang.setText(originalLangName);
+        tvTranslateLang.setText(translateLangName);
+        etText.setText(tvRes.getText().toString());
     }
 
     @Override
@@ -153,6 +241,21 @@ public class MainFragment extends Fragment implements MainView, View.OnClickList
     public void showTranslation(Translate translate) {
         tvRes.setText(translate.getTranslatedText());
         currentTranslate = translate;
+    }
+
+    public void share(){
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND).setType("text/plain");
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "\n\n");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, tvRes.getText().toString());
+        c.startActivity(Intent.createChooser(sharingIntent,  "Отправить перевод с помощью"));
+    }
+
+    public void fullScreen(){
+        Intent intent = new Intent(getActivity(), DetailTextActivity.class).putExtra("text", tvRes.getText().toString());
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), (View)tvRes, "profile");
+        startActivity(intent, options.toBundle());
     }
 
     @Override

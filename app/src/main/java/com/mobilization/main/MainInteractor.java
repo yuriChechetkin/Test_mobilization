@@ -1,5 +1,6 @@
 package com.mobilization.main;
 
+import com.mobilization.models.Language;
 import com.mobilization.models.Translate;
 import com.mobilization.models.TranslateResponse;
 
@@ -23,4 +24,20 @@ public interface MainInteractor {
     boolean isFavorite(Translate t);
 
     String getHistory();
+
+    Language getCurrentOriginalLang();
+
+    Language getCurrentTranslateLang();
+
+    void setOriginalLang(Language l);
+
+    void setTranslateLang(Language l);
+
+    void swapLang();
+
+    Translate getLastTranslate();
+
+    void setLastTranslate(Translate t);
+
+    Language getLangByUi(String str);
 }

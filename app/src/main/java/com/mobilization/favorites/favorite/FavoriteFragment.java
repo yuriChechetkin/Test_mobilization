@@ -1,9 +1,11 @@
 package com.mobilization.favorites.favorite;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.SearchView;
@@ -37,6 +39,9 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
 
     @Inject
     Context c;
+
+    @Inject
+    Resources res;
 
     @BindView(R.id.rv)
     RecyclerView rv;
@@ -83,6 +88,10 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
         rv.setLayoutManager(layoutManager);
         adapter = new FavoriteAdapter(translates, this);
         rv.setAdapter(adapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
+                layoutManager.getOrientation());
+        dividerItemDecoration.setDrawable(res.getDrawable(R.drawable.item_divider));
+        rv.addItemDecoration(dividerItemDecoration);
     }
 
     private void initLayoutReferences() {
@@ -108,6 +117,13 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
     @Override
     public void deleteFavorite(Translate t) {
 
+    }
+
+    @Override
+    public void clearHistory() {
+        favoritePresenter.clearHistory();
+        translates.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

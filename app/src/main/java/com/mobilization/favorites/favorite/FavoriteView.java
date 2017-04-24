@@ -14,6 +14,8 @@ public interface FavoriteView {
 
     void deleteFavorite(Translate t);
 
+    void clearHistory();
+
     void addFavorite(Translate t);
 
     void loadingStarted();
